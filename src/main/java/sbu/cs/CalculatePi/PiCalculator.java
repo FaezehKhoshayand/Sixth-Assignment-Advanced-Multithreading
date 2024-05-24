@@ -3,10 +3,9 @@ package sbu.cs.CalculatePi;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
 
 public class PiCalculator {
 
@@ -19,7 +18,7 @@ public class PiCalculator {
      * Create as many classes and threads as you need.
      * Your code must pass all of the test cases provided in the test folder.
 
-     * @param floatingPoint the exact number of digits after the floating point
+     //* @param floatingPoint the exact number of digits after the floating point
      * @return pi in string format (the string representation of the BigDecimal object)
      */
 
@@ -52,22 +51,43 @@ public class PiCalculator {
         pi = new BigDecimal(0);
         ExecutorService threadPool = Executors.newFixedThreadPool(4);  //a power of 2
 
-        for (int i = 0; i <= 1000; i++){     // increasing the number of iterations improves accuracy
+        for (int i = 0; i <= 10000; i++){     // increasing the number of iterations improves accuracy
             calculateTask task = new calculateTask(i);
             threadPool.execute(task);
         }
         threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(10000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        try {
+//            threadPool.awaitTermination(10000, TimeUnit.MILLISECONDS);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        //------------------------------------------------------------------
+        long timeoutMillis = 10000;
+        long startTime = System.currentTimeMillis();
+
+        while (!threadPool.isTerminated()) {
+            if (System.currentTimeMillis() - startTime > timeoutMillis) {
+                System.out.println("Timeout: not all tasks completed in the given time.");
+                break;
+            }
+
+            try {
+                Thread.sleep(100); // Sleep for a short while before checking again
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Interrupted while waiting for termination.");
+                break;
+            }
         }
-        pi = pi.setScale(floatingPoint, RoundingMode.DOWN);
-        return pi.toString();
+        //---------------------------------------------------------------------
+        //What I was supposed to do is written in the ncommented section.The TimeUnit.MILLISECONDS was getting and error cause the related package couldn't be imported ,so I decided to copy the marked section that does the same thing as the commented one from GPT.
+        pi = pi.setScale(floatingPoint,BigDecimal.ROUND_DOWN);
+        return pi.toPlainString();
     }
 
     public static void main(String[] args) {
         // Use the main function to test the code yourself
-
+        PiCalculator pi = new PiCalculator();
+        System.out.println(pi.calculate(1000));
     }
 }
