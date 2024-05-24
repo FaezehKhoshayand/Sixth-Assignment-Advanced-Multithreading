@@ -2,8 +2,12 @@
 ## Bailey–Borwein–Plouffe formula
 
 Among all the algorithms possible for calculating pi such as Chudnovsky algorithm, Leibniz’s formula and etc. The BBP was mostly recommended because 
-1-it calculates the digits of pi with a high accuracy and also 
-2-it takes a short amount of time for calculation and the reason is that in this algorithm we are working with basic data types that consume little memory.
+<p>
+  1-it calculates the digits of pi with a high accuracy and also 
+</p>  
+<p>
+  2-it takes a short amount of time for calculation and the reason is that in this algorithm we are working with basic data types that         consume little memory.
+</p>
 <p>
   <img style="float: left;" src="BBP.jpg">
 </p>
